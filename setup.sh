@@ -80,6 +80,7 @@ try: d=json.load(open(p))
 except Exception: d={}
 d["lmstudioCode.minContextLength"]=65536   # panel compacts ~52K, under the real limit
 d["lmstudioCode.gpuOffload"]="max"
+d["lmstudioCode.defaultThinkingEffort"]="medium"  # Qwen defaults to xhigh; medium is ~9x faster
 json.dump(d,open(p,"w"),indent=4)
 print("updated",p)
 PY

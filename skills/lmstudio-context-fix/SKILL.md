@@ -74,6 +74,27 @@ fires with room for the summary. It also drops MCP servers and the skills catalo
 (`--strict-mcp-config --mcp-config '{"mcpServers":{}}' --disable-slash-commands`)
 so the fixed part of every turn stays small.
 
+## Symptom 4: replies are very slow, or cut off mid-sentence
+
+Two causes, often together:
+
+1. **Thinking effort too high.** Qwen 3.8 defaults to `xhigh` reasoning, so it thinks
+   for a long time before writing, and that reasoning counts against the output
+   budget, so long answers get truncated ("Response was cut off — it reached the
+   output token limit"). Measured on an M5 Max, same trivial prompt: default 70s vs
+   `medium` 8s vs `low` 7s, all correct. Fix with the panel setting:
+
+   ```jsonc
+   { "lmstudioCode.defaultThinkingEffort": "medium" }
+   ```
+
+   Values `auto`/`off`/`low`/`medium`/`high`. Use `off` for quick edits, `medium` for
+   everyday coding, `high` only for hard problems. It is an effort dial, not a hard
+   thinking-token cap.
+2. **A genuinely long single answer.** Reply "continue" to resume from the cut point,
+   or ask for less at once ("under 300 words", "just the code"). Lower thinking effort
+   also frees budget for the actual answer.
+
 ## The habit that matters most: work file-first
 
 Compaction on a 27B produces a **lower-fidelity summary** than a frontier model. In

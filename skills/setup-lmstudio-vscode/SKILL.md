@@ -82,6 +82,26 @@ the real size. Edit the user's VS Code settings.json
 On a machine with much more or less RAM, set this near the window LM Studio actually
 grants (see `lms ps`, or the panel's model picker after loading).
 
+## Step 4b: Turn the thinking effort down (Qwen "thinks too much")
+
+Qwen 3.8 defaults to maximum reasoning effort (`xhigh`), so even trivial replies
+crawl and the long thinking pass eats the output budget, causing cut-off answers.
+Measured on an M5 Max on the same trivial question: default took 70s, `medium` took
+8s, `low` took 7s, all with the correct answer. Set a sane default:
+
+```jsonc
+{ "lmstudioCode.defaultThinkingEffort": "medium" }
+```
+
+Panel values are `auto`, `off`, `low`, `medium`, `high`. Guidance for the user:
+- `off` for quick edits, renames, boilerplate, chat (fastest, no reasoning).
+- `medium` for everyday coding (good balance; recommended default).
+- `high` only for hard planning or a nasty bug (slow, reasons deeply).
+
+It is an effort dial, not a hard thinking-token cap, so `medium` does not cut a
+thought off mid-way; the model just decides to think less. Changing it applies on
+the next message (start a new chat or send again).
+
 ## Step 5: Load, serve, verify
 
 ```sh

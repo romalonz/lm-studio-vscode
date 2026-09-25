@@ -1,4 +1,5 @@
 {
     "lmstudioCode.minContextLength": 65536,
-    "lmstudioCode.gpuOffload": "max"
+    "lmstudioCode.gpuOffload": "max",
+    "lmstudioCode.defaultThinkingEffort": "medium"
 }

@@ -71,6 +71,28 @@ The fix, applied by `setup.sh`, is one VS Code setting:
 With this, the panel summarizes older turns on its own around the low-50s K and keeps
 going. A compaction costs one re-read of the conversation (a minute or two on a 27B).
 
+## Qwen "thinks too much": lower the thinking effort
+
+Qwen 3.8 defaults to maximum reasoning effort (`xhigh`), so even simple replies crawl,
+and the long thinking pass eats the output budget, which truncates answers. Measured
+on an M5 Max, same trivial question:
+
+| Thinking effort | Time to answer |
+|---|---|
+| default (xhigh) | 70s |
+| medium | 8s |
+| low | 7s |
+
+`setup.sh` sets a sane default. To change it, edit the VS Code setting:
+
+```jsonc
+{ "lmstudioCode.defaultThinkingEffort": "medium" }  // auto | off | low | medium | high
+```
+
+Use `off` for quick edits and chat, `medium` for everyday coding, `high` only for hard
+problems. It is an effort dial, not a hard thinking-token cap. Applies on the next
+message.
+
 **Two habits keep it smooth:**
 
 1. **One task per chat.** Fewer compactions, fewer chances for a weak summary.
