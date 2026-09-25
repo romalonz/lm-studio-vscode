@@ -1,0 +1,40 @@
+{
+  "name": "lm-studio-vscode",
+  "owner": {
+    "name": "Romeo Malonzo"
+  },
+  "metadata": {
+    "description": "Run a capable coding model fully local on an Apple Silicon Mac inside VS Code, with the context-window auto-compaction fix that keeps long sessions from jamming. Packaged as a Claude Code plugin: a setup skill, a troubleshooting skill, a slash command, and field-tested scripts."
+  },
+  "plugins": [
+    {
+      "name": "lm-studio-vscode",
+      "source": "./",
+      "description": "Set up and run LM Studio's local MLX model in VS Code (LM Studio Code panel, Cline, or Claude Code on the local model), with working auto-compaction on a 32-36 GB Mac.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Romeo Malonzo"
+      },
+      "license": "MIT",
+      "keywords": [
+        "lm-studio",
+        "mlx",
+        "local-llm",
+        "vscode",
+        "apple-silicon",
+        "qwen",
+        "auto-compaction",
+        "offline-coding"
+      ],
+      "category": "productivity",
+      "tags": [
+        "lm-studio",
+        "local-llm",
+        "vscode",
+        "mlx",
+        "offline"
+      ],
+      "strict": false
+    }
+  ]
+}

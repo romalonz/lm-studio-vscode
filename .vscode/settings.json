@@ -1,0 +1,4 @@
+{
+    "lmstudioCode.minContextLength": 65536,
+    "lmstudioCode.gpuOffload": "max"
+}
