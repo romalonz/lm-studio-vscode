@@ -85,6 +85,27 @@ json.dump(d,open(p,"w"),indent=4)
 print("updated",p)
 PY
 
+# --- 4c. shrink image tokens ----------------------------------------------
+# LM Studio cannot trim a context that contains an image, so a few big screenshots
+# blow the small window and jam the session. Cap image size so each costs far fewer
+# vision tokens (1024px is plenty for a screen/error shot).
+say "Lowering LM Studio's max image size to 1024px"
+LMSET="$HOME/.lmstudio/settings.json"
+if [ -f "$LMSET" ]; then
+  cp "$LMSET" "$LMSET.bak-$(date +%Y%m%d-%H%M%S)"
+  python3 - "$LMSET" <<'PY'
+import json,sys
+p=sys.argv[1]
+try: d=json.load(open(p))
+except Exception: d={}
+img=d.setdefault("chat",{}).setdefault("imageInputs",{})
+img["userMaxImageDimensionPixelsEnabled"]=True
+img["userMaxImageDimensionPixels"]=1024
+json.dump(d,open(p,"w"),indent=2)
+print("updated",p)
+PY
+fi
+
 # --- 5. load + serve -------------------------------------------------------
 if [ "${SKIP_MODEL:-0}" != "1" ]; then
   say "Loading $MODEL_KEY and starting the local server on http://localhost:1234"

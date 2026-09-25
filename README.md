@@ -96,8 +96,13 @@ message.
 **Two habits keep it smooth:**
 
 1. **One task per chat.** Fewer compactions, fewer chances for a weak summary.
-2. **No screenshots in a long coding session.** An image blocks LM Studio's trimming,
-   which is the usual cause of a hard freeze. Keep images in short throwaway chats.
+2. **Go easy on screenshots in a long coding session.** LM Studio cannot trim a context
+   that contains an image, so a few big screenshots (one case: six in one message) jam
+   the session with a "TruncateMiddle ... not supported for prompts with images" error,
+   and it cannot be recovered — start a new chat. `setup.sh` caps image size at 1024px
+   (`chat.imageInputs.userMaxImageDimensionPixels`) so each screenshot costs ~1/4 the
+   tokens, which helps but does not remove the limit. In long sessions, paste the error
+   *text* instead of a picture, and use a fresh short chat when you must show an image.
 
 **After a compaction, work file-first.** A 27B writes a lower-fidelity summary than a
 frontier model, so its memory of earlier steps can be wrong. Keep plans, state, and

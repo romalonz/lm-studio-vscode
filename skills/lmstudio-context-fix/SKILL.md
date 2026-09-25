@@ -49,7 +49,27 @@ currently supported for prompts with images.
 LM Studio cannot trim a conversation that contains an image, so once such a session
 grows past the window it errors instead of shortening, and it keeps erroring on
 every send to that session. **You cannot rescue that session** — start a new one.
-Prevention: keep screenshots in short throwaway chats; do long coding text-only.
+Each image is thousands of tokens, so a few screenshots (one case: six in one message)
+are enough to blow a ~60K window on their own.
+
+**Reduce the token cost per image.** Lower LM Studio's max image dimension so each
+screenshot costs far fewer vision tokens (1024px is plenty for a screen or error shot,
+roughly a quarter of the tokens of the 2048px default). Edit `~/.lmstudio/settings.json`
+and restart the daemon (`lms daemon down && lms daemon up`):
+
+```jsonc
+{ "chat": { "imageInputs": {
+    "userMaxImageDimensionPixelsEnabled": true,
+    "userMaxImageDimensionPixels": 1024
+} } }
+```
+
+**Prevention that actually holds** (the size cut lowers risk but does not remove the
+limit, since LM Studio still cannot trim any context that has an image in it):
+- One or two images per chat, never a stack of them.
+- In a long coding session, paste the error *text* instead of a screenshot. Text is
+  tiny and trimmable; images are neither.
+- Use a fresh short chat to show the model a picture, then return to your text session.
 
 ## Symptom 3: the panel/chat won't open at all
 

@@ -1,6 +1,6 @@
 {
   "name": "lm-studio-vscode",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Run a capable coding model fully local on an Apple Silicon Mac inside VS Code, with the context-window auto-compaction fix that keeps long sessions from jamming. Includes a setup skill, a troubleshooting skill, a slash command, and field-tested scripts (parallel model downloader, local Claude Code launcher, chat clients).",
   "author": {
     "name": "Romeo Malonzo"
