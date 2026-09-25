@@ -118,11 +118,34 @@ cd ~/your-project
 /path/to/lm-studio-vscode/scripts/local-claude.sh -p "task" # one-shot
 ```
 
-The launcher loads the model, tells Claude Code the *real* context window at 85% so
-auto-compact fires with headroom, and drops MCP servers and the skills catalog to keep
-each turn small. The first reply takes 1-2 minutes (large system prompt on a 27B);
-later turns reuse the cache. Append `--dangerously-skip-permissions` yourself if you
-want it to act without prompts.
+The launcher loads the model and tells Claude Code the *real* context window at 85% so
+auto-compact fires with headroom. It has two modes:
+
+- **lean (default):** drops MCP servers and the skills catalog so each turn stays small
+  and fast.
+- **`FULL=1 scripts/local-claude.sh`:** loads the whole Claude Code kit — hooks,
+  plugins, skills, subagents, MCP, including any marketplaces you have installed. Same
+  harness as your normal Claude Code; only the model differs. Noticeably slower on a
+  27B/60K window because every skill and tool schema competes for context (a smoke test
+  replied correctly in ~140s).
+
+The first reply takes 1-2 minutes (large system prompt on a 27B); later turns reuse the
+cache. Append `--dangerously-skip-permissions` yourself if you want it to act without
+prompts.
+
+**Hooks/plugins/skills/agents are harness features, not model features.** The local
+model only "has" them when you run it inside Claude Code (`FULL=1`). The LM Studio Code
+panel and Cline give a lighter kit: MCP servers plus an instructions file, not Claude
+Code's skills/hooks/plugins/subagents.
+
+### Operator profile (stop the hedging)
+
+`profiles/AGENTS.md` is a short system prompt that makes the model direct and
+action-first for your own work, without stripping its safety. Copy it into the workspace
+you open in VS Code (the panel and Claude Code both read `AGENTS.md`/`CLAUDE.md`), or
+paste it into Cline's Custom Instructions. See the `qwen-operator-profile` skill. It is
+not a jailbreak: this project does not remove a model's safety training or ship a
+no-safety model.
 
 ### 3. Cline
 Provider "LM Studio", base URL `http://localhost:1234`, model `qwen3.8-27b-mlx`.
