@@ -95,3 +95,19 @@ above is the route.
 ## References
 mlx#3186, mlx-lm#883, LM Studio bug-tracker #1504, the ronm92130 test-report gist,
 Harperbot/metal-guard (a Python safety layer that also lowers the trigger rate).
+
+
+## Also: the single-threaded hang (and the watchdog that fixes it)
+
+`mlx_lm.server` handles ONE request at a time. If a single request ever hangs (an
+overlap, a bad prompt, a stalled prefill), every later request queues behind it and
+times out, so it looks like the whole model died or "operation timed out" even though
+the machine is fine. Note: large prompts are NOT the cause, a healthy server prefills
+10-22K-token prompts in ~10-12s; the hang is a rare stuck request.
+
+Fix: a health watchdog that auto-restarts the server when it hangs. `scripts/mlx-watchdog.sh`
+pings `/v1/models` (60s timeout); after ~2 min of unresponsiveness it kills mlx-serve so
+the KeepAlive agent relaunches it clean. Run it as its own KeepAlive LaunchAgent
+(`com.romeo.mlx-watchdog`). With this, a hang self-heals in ~2 min instead of stalling
+your whole batch. Combined with the wired-limit fix (no reboots), this is what makes an
+unattended multi-hour run actually seamless.
