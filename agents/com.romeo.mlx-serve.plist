@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>com.romeo.mlx-serve</string>
+  <key>ProgramArguments</key><array><string>/bin/bash</string><string>/Users/USER/lm-workspace/scripts/mlx-serve.sh</string></array>
+  <key>EnvironmentVariables</key><dict>
+    <key>MODEL</key><string>/Users/USER/.lmstudio/models/lmstudio-community/Qwen2.5-Coder-14B-Instruct-MLX-4bit</string>
+    <key>PORT</key><string>1234</string>
+    <key>MLX_SERVE_MODELS</key><string>qwen2.5-coder-14b=/Users/USER/.lmstudio/models/lmstudio-community/Qwen2.5-Coder-14B-Instruct-MLX-4bit;qwen3-14b=/Users/USER/.lmstudio/models/lmstudio-community/Qwen3-14B-MLX-4bit</string>
+  </dict>
+  <key>RunAtLoad</key><true/><key>KeepAlive</key><true/>
+  <key>StandardErrorPath</key><string>/Users/USER/.lmstudio/mlx-serve.err</string>
+</dict></plist>

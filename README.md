@@ -22,6 +22,20 @@ Tested on an M5 Max, 36 GB. Should work on any Apple Silicon Mac with 32 GB or m
 > `mlx_lm.server` with the wired-memory limit disabled, see the **mlx-no-reboot** skill
 > and `scripts/mlx-serve.sh`. It also runs faster than LM Studio's server.
 
+## TL;DR — the setup that works on a 32-36 GB Mac
+
+A 27-30B model is NOT reliable on 36 GB (reboots or hangs). Use **two ~14B models served
+on demand** with no reboots, and keep a bigger model only as an occasional power option:
+
+- **Reliable daily (one URL, on-demand):** `http://<mac>:1234/v1`, models
+  `qwen2.5-coder-14b` (Act) and `qwen3-14b` (Plan/reasoning). One `mlx_lm` server loads a
+  model by name and swaps on request. No reboots, huge memory headroom.
+- **Power option (sparingly):** the 27B via LM Studio at `http://<mac>:1236/v1`
+  (`scripts/power-27b.sh`, auto-unloads after 30 min). Carries the reboot risk; the 27B +
+  one 14B both loaded is ~18% free RAM on 36 GB.
+
+Full details in the **local-model-setup-mac** and **mlx-no-reboot** skills.
+
 ## Install as a Claude Code plugin (recommended)
 
 This repo is a Claude Code plugin marketplace. Inside Claude Code:
@@ -199,7 +213,10 @@ Stick to 4-bit MLX on 36 GB. It leaves room for the context window and other app
 ```
 setup.sh                   one-shot installer
 .vscode/settings.json      the auto-compaction settings (also written to User settings)
-scripts/mlx-serve.sh       serve via mlx_lm with the reboot bug disabled (see mlx-no-reboot skill)
+scripts/mlx-serve.sh       on-demand multi-model mlx_lm server, reboot bug disabled
+scripts/mlx-watchdog.sh    restarts the server if inference deadlocks (via /health)
+scripts/power-27b.sh       bring up the 27B power option on demand (LM Studio :1236)
+agents/                    LaunchAgent templates (KeepAlive server, watchdog, caffeinate)
 scripts/local-claude.sh    run Claude Code on the local model
 scripts/hf-fast-download.sh parallel, verified model downloader
 scripts/chat.py            minimal Python chat client (stdlib only)
