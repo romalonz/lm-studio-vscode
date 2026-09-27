@@ -16,6 +16,12 @@ Tested on an M5 Max, 36 GB. Should work on any Apple Silicon Mac with 32 GB or m
   chat) and Cline. Plus Claude Code itself pointed at the local model.
 - **Working auto-compaction**, so a long session summarizes itself instead of jamming.
 
+> **If your Mac randomly reboots or freezes while serving a large model** (32-64 GB Mac,
+> 27-30B MLX model, sometimes with screen glitching and no crash log): that is a known
+> Apple GPU-driver kernel-panic bug (mlx#3186), not your setup. The fix is to serve via
+> `mlx_lm.server` with the wired-memory limit disabled, see the **mlx-no-reboot** skill
+> and `scripts/mlx-serve.sh`. It also runs faster than LM Studio's server.
+
 ## Install as a Claude Code plugin (recommended)
 
 This repo is a Claude Code plugin marketplace. Inside Claude Code:
@@ -193,6 +199,7 @@ Stick to 4-bit MLX on 36 GB. It leaves room for the context window and other app
 ```
 setup.sh                   one-shot installer
 .vscode/settings.json      the auto-compaction settings (also written to User settings)
+scripts/mlx-serve.sh       serve via mlx_lm with the reboot bug disabled (see mlx-no-reboot skill)
 scripts/local-claude.sh    run Claude Code on the local model
 scripts/hf-fast-download.sh parallel, verified model downloader
 scripts/chat.py            minimal Python chat client (stdlib only)
